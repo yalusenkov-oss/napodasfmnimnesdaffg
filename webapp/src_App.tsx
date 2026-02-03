@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTelegram } from '@/hooks/useTelegram';
+import { useTelegram } from '@/contexts/TelegramContext';
 import { useTasks } from '@/hooks/useTasks';
 import { Header } from '@/components/Header';
 import { FilterTabs } from '@/components/FilterTabs';
@@ -78,10 +78,12 @@ export function App() {
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div
-          className="pointer-events-auto px-2.5 sm:px-4 py-2 sm:py-3 rounded-2xl shadow-2xl flex items-center gap-2 sm:gap-3 backdrop-blur-xl"
+          className="pointer-events-auto px-2.5 sm:px-4 py-2 sm:py-3 rounded-2xl flex items-center gap-2 sm:gap-3 backdrop-blur-xl"
           style={{ 
             backgroundColor: theme.isDark ? 'rgba(44, 44, 46, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+            boxShadow: theme.isDark 
+              ? '0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)' 
+              : '0 8px 32px rgba(0, 0, 0, 0.12)',
             maxWidth: 'calc(100vw - 16px)',
           }}
         >

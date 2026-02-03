@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTelegram } from '@/hooks/useTelegram';
+import { useTelegram } from '@/contexts/TelegramContext';
 import { Calendar } from '@/components/Calendar';
 import type { Task } from '@/types/task';
 
@@ -158,12 +158,22 @@ export function TaskForm({ task, onSubmit, onUpdate, onClose }: TaskFormProps) {
         onClick={onClose}
       >
         {/* Backdrop */}
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+        <div 
+          className="absolute inset-0 backdrop-blur-sm" 
+          style={{ 
+            backgroundColor: theme.isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)' 
+          }}
+        />
 
         {/* Form Container */}
         <div
-          className="relative w-full max-w-lg rounded-t-3xl shadow-2xl pb-safe animate-slide-up max-h-[85vh] flex flex-col"
-          style={{ backgroundColor: theme.bgColor }}
+          className="relative w-full max-w-lg rounded-t-3xl pb-safe animate-slide-up max-h-[85vh] flex flex-col"
+          style={{ 
+            backgroundColor: theme.bgColor,
+            boxShadow: theme.isDark 
+              ? '0 -4px 32px rgba(0, 0, 0, 0.5)' 
+              : '0 -4px 32px rgba(0, 0, 0, 0.15)',
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Handle + Header - Fixed at top */}
@@ -386,8 +396,13 @@ export function TaskForm({ task, onSubmit, onUpdate, onClose }: TaskFormProps) {
                 {/* Dropdown */}
                 {showReminderDropdown && (
                   <div 
-                    className="absolute top-full left-0 right-0 mt-2 rounded-xl shadow-xl overflow-hidden z-10"
-                    style={{ backgroundColor: theme.secondaryBgColor }}
+                    className="absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden z-10"
+                    style={{ 
+                      backgroundColor: theme.secondaryBgColor,
+                      boxShadow: theme.isDark 
+                        ? '0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)' 
+                        : '0 8px 24px rgba(0, 0, 0, 0.12)',
+                    }}
                   >
                     {REMINDER_OPTIONS.map(({ value, label, isCustom }) => {
                       const isSelected = isCustom ? isCustomReminder : (!isCustomReminder && reminderMinutes === value);
