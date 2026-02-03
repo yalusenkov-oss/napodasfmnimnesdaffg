@@ -1,11 +1,16 @@
-import { useTelegram } from '@/hooks/useTelegram';
+import { useTelegram } from '@/contexts/TelegramContext';
 
 interface HeaderProps {
   onAddClick: () => void;
 }
 
 export function Header({ onAddClick }: HeaderProps) {
-  const { theme, user, toggleTheme } = useTelegram();
+  const { theme, user, toggleTheme, hapticFeedback } = useTelegram();
+  
+  const handleToggleTheme = () => {
+    hapticFeedback('selection');
+    toggleTheme();
+  };
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -39,30 +44,54 @@ export function Header({ onAddClick }: HeaderProps) {
         <div className="flex items-center gap-2">
           {/* Theme Toggle Button */}
           <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-12 h-12 rounded-full transition-transform active:scale-95"
+            onClick={handleToggleTheme}
+            className="flex items-center justify-center w-10 h-10 rounded-full transition-all active:scale-95"
             style={{ 
               backgroundColor: theme.secondaryBgColor,
-              color: theme.textColor
             }}
             title={theme.isDark ? 'Светлая тема' : 'Тёмная тема'}
           >
             {theme.isDark ? (
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.657 5.657l-.707-.707m-5.9-5.9l-.707-.707m0 11.314l-.707.707m5.9 5.9l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
+              <svg 
+                className="w-5 h-5" 
+                fill="none" 
+                stroke={theme.textColor} 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" 
+                />
               </svg>
             ) : (
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              <svg 
+                className="w-5 h-5" 
+                fill="none" 
+                stroke={theme.textColor} 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
+                />
               </svg>
             )}
           </button>
-
+          
           {/* Add Task Button */}
           <button
             onClick={onAddClick}
-            className="flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-transform active:scale-95"
-            style={{ backgroundColor: theme.buttonColor }}
+            className="flex items-center justify-center w-12 h-12 rounded-full transition-transform active:scale-95"
+            style={{ 
+              backgroundColor: theme.buttonColor,
+              boxShadow: theme.isDark 
+                ? '0 4px 12px rgba(0, 0, 0, 0.4)' 
+                : '0 4px 12px rgba(0, 0, 0, 0.15)',
+            }}
           >
             <svg 
               className="w-6 h-6" 
@@ -80,48 +109,6 @@ export function Header({ onAddClick }: HeaderProps) {
           </button>
         </div>
       </div>
-
-      {/* Bot Info Banner */}
-      <div 
-        className="mt-4 p-3 rounded-xl flex items-center gap-2 sm:gap-3"
-        style={{ backgroundColor: theme.secondaryBgColor }}
-      >
-        <div 
-          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: theme.buttonColor + '20' }}
-        >
-          <svg 
-            className="w-4 h-4 sm:w-5 sm:h-5" 
-            fill="none" 
-            stroke={theme.buttonColor} 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" 
-            />
-          </svg>
-        </div>
-        <div className="flex-1 min-w-0 overflow-hidden">
-          <p 
-            className="text-xs sm:text-sm font-medium leading-snug"
-            style={{ color: theme.textColor }}
-          >
-            Отправьте боту голосовое или текст
-          </p>
-          <p 
-            className="text-xs truncate mt-0.5"
-            style={{ color: theme.hintColor }}
-          >
-            «Напомни в 18:00 забрать посылку»
-          </p>
-        </div>
-      </div>
-    </header>
-  );
-}
 
       {/* Bot Info Banner */}
       <div 

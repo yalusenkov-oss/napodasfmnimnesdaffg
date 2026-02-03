@@ -104,6 +104,10 @@ export function useTelegram() {
     });
   }, []);
 
+  const toggleTheme = useCallback(() => {
+    setTheme(prevTheme => prevTheme.isDark ? defaultTheme : darkTheme);
+  }, []);
+
   return {
     theme,
     user,
@@ -111,5 +115,6 @@ export function useTelegram() {
     isTelegram,
     hapticFeedback,
     showConfirm,
+    toggleTheme,
   };
 }
